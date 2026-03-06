@@ -1,0 +1,34 @@
+# Ignore downloaded files
+downloads/
+*.mp3
+*.mp4
+*.webm
+*.m4a
+*.wav
+
+# Ignore archives and logs
+archive.txt
+download_log.txt
+state.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

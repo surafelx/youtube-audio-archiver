@@ -1,0 +1,5 @@
+# YouTube Audio Archiver - Channel List
+# Add one YouTube channel URL per line
+# Example format: https://youtube.com/@channelname/videos
+
+https://www.youtube.com/@visualspam

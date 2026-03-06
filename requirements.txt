@@ -1,0 +1,13 @@
+# YouTube Audio Archiver - Python Dependencies
+
+# Core dependencies
+flask>=2.0.0
+yt-dlp[curl_cffi]>=2023.0.0
+ffmpeg-python>=0.2.0
+imageio-ffmpeg>=0.5.0
+quickjs>=1.0.0
+
+# FFmpeg binary must be installed separately
+# Windows: Download from https://ffmpeg.org/download.html
+# Or install via Chocolatey: choco install ffmpeg
+# Or via winget: winget install ffmpeg
