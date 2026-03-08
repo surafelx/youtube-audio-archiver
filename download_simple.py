@@ -34,39 +34,45 @@ def load_channels():
 
 def get_channel_video_count(channel_url, min_duration=0):
     """Get the total number of videos in a channel."""
-    cmd = [
-        sys.executable, '-m', 'yt_dlp',
-        '--flat-playlist',
-        '--print', '%(n_entries)s',
-    ]
+    # Try multiple times with different approaches to get max videos
+    max_count = 0
     
-    # Add duration filter if specified
-    if min_duration > 0:
-        cmd.extend(['--match-filter', f'duration > {min_duration}'])
-    
-    cmd.append(channel_url)
-    
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace',
-            timeout=60
-        )
+    for playlist_end in [1000, 5000, 10000]:
+        cmd = [
+            sys.executable, '-m', 'yt_dlp',
+            '--flat-playlist',
+            '--playlist-end', str(playlist_end),
+            '--print', '%(n_entries)s',
+        ]
         
-        # Parse the output to get video count
-        output = result.stdout.strip()
-        # Last line should contain the count
-        lines = output.split('\n')
-        for line in reversed(lines):
-            if line.strip().isdigit():
-                return int(line.strip())
-        return 0
-    except Exception as e:
-        print(f"Error getting video count: {e}")
-        return 0
+        # Add duration filter if specified
+        if min_duration > 0:
+            cmd.extend(['--match-filter', f'duration > {min_duration}'])
+        
+        cmd.append(channel_url)
+        
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='replace',
+                timeout=120
+            )
+            
+            # Parse the output to get video count
+            output = result.stdout.strip()
+            lines = output.split('\n')
+            for line in reversed(lines):
+                if line.strip().isdigit():
+                    count = int(line.strip())
+                    if count > max_count:
+                        max_count = count
+        except Exception as e:
+            continue
+    
+    return max_count
 
 def download_with_ytdlp(channel_url, test_mode=False, limit=0, min_duration=0, video_count=0):
     """Download audio from a channel using yt-dlp CLI."""
